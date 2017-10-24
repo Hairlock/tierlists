@@ -17,8 +17,13 @@ defmodule TierlistsWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+  end
+
+  scope "/api/v1/", TierlistsWeb do
+    pipe_through :api
+
     resources "/users", UserController, only: [:create]
-    resources "/sessions", SessionController, only: [:create]
+    resources "/sessions", SessionController, only: [:create]    
   end
 
   scope "/info", TierlistsWeb do
