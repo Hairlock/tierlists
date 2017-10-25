@@ -45,7 +45,8 @@ defmodule TierlistsWeb.Mixfile do
       {:gettext, "~> 0.11"},
       {:tierlists, in_umbrella: true},
       {:cowboy, "~> 1.0"},
-      {:cors_plug, "~> 1.2"}
+      {:cors_plug, "~> 1.2"},
+      {:errors, "~> 0.1.0"}
     ]
   end
 

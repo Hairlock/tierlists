@@ -40,7 +40,8 @@ defmodule Tierlists.Mixfile do
       {:ecto, "~> 2.1"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 0.12"},
-      {:secure_random, "~> 0.2"}
+      {:secure_random, "~> 0.2"},
+      {:errors, "~> 0.1.0"}
     ]
   end
 
