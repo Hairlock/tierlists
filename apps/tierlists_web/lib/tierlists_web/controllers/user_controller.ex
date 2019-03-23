@@ -1,27 +1,42 @@
 defmodule TierlistsWeb.UserController do
   use TierlistsWeb, :controller
 
-  alias Tierlists.User
-  alias Tierlists.Repo
+  alias Tierlists.Accounts
+  alias Tierlists.Accounts.User
 
-  plug :scrub_params, "user" when action in [:create]
+  action_fallback TierlistsWeb.FallbackController
+
+  def index(conn, _params) do
+    users = Accounts.list_users()
+    render(conn, "index.json", users: users)
+  end
 
   def create(conn, %{"user" => user_params}) do
-    changeset = User.registration_changeset(%User{}, user_params)
-
-    case Repo.insert(changeset) do
-      {:ok, user} ->
-        conn
-          |> put_status(:created)
-          |> render("show.json", user: user)
-      {:error, changeset} ->
-        conn
-          |> put_status(:unprocessable_entity)
-          |> render(TierlistsWeb.ChangesetView, "error.json", changeset: changeset)
+    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", user_path(conn, :show, user))
+      |> render("show.json", user: user)
     end
   end
 
-  
+  def show(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    render(conn, "show.json", user: user)
+  end
 
+  def update(conn, %{"id" => id, "user" => user_params}) do
+    user = Accounts.get_user!(id)
 
+    with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
+      render(conn, "show.json", user: user)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    with {:ok, %User{}} <- Accounts.delete_user(user) do
+      send_resp(conn, :no_content, "")
+    end
+  end
 end

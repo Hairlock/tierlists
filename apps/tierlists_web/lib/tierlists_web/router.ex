@@ -32,6 +32,12 @@ defmodule TierlistsWeb.Router do
     get "/about", InfoController, :about
   end
 
+  scope "/admin", TierlistsWeb.Admin, as: :admin do
+    pipe_through :browser
+    
+    resources "/users", UserController
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", TierlistsWeb do
   #   pipe_through :api
